@@ -99,7 +99,13 @@ end
 # With conditional
 
 class Article < ApplicationRecord
-  scope :created_before, ->(time) { where("created_at < ?", time) if time.present? }
+  scope :created_before, ->(time) { where('created_at < ?', time) if time.present? }
 end
 
-# W
+# Written differently, this would be:
+
+class Article < ApplicationRecord
+  def self.created_before(time)
+    where('created_at < ?', time) if time.present?
+  end
+end
