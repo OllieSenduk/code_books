@@ -82,3 +82,24 @@ class User < ActiveRecord::Base
     memberships.only_active.order_by_activity.limit_results
   end
 end
+
+Article.created_before(Time.zone.now)
+
+class Article < ApplicationRecord
+  scope :published,               -> { where(published: true) }
+  scope :published_and_commented, -> { published.where('comments_count > 0') }
+end
+
+# Other example that takes an argument:
+
+class Article < ApplicationRecord
+  scope :created_before, ->(time) { where('created_at < ?', time) }
+end
+
+# With conditional
+
+class Article < ApplicationRecord
+  scope :created_before, ->(time) { where("created_at < ?", time) if time.present? }
+end
+
+# W
